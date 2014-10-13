@@ -5,7 +5,7 @@ import mimetypes
 import urllib.parse
 import zipfile
 
-from flask import Flask, render_template, abort
+from flask import Flask, abort, render_template, request
 import rarfile
 
 
@@ -19,6 +19,7 @@ ARCHIVE_TYPES = {
     'application/x-cbr': rarfile.RarFile,
     'application/x-cbz': zipfile.ZipFile
 }
+NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
 
@@ -40,6 +41,23 @@ def archive_title(archive_path):
     title, _ = os.path.splitext(os.path.basename(archive_path))
     return title
 
+
+def archive_page(archive, page):
+    try:
+        archive_info = archive.getinfo(page)
+    except NOT_FOUND_EXCEPTIONS:
+        abort(404)
+
+    headers = {
+        'Content-Type': mimetypes.guess_type(page)[0],
+        'Cache-Control': 'private, max-age=%s' % (60*60*24*365),
+        'ETag': str(archive_info.CRC)
+    }
+
+    if request.headers.get('If-None-Match') == headers['ETag']:
+        return '', 304, headers
+    return archive.read(page), 200, headers
+
 @app.route('/library/<path:path>/pages/<path:page>')
 def issue_page(path, page):
     full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
@@ -47,7 +65,7 @@ def issue_page(path, page):
         abort(404)
 
     with open_archive(full_path) as archive:
-        return archive.read(page), 200, {'Content-Type': mimetypes.guess_type(page)[0]}
+        return archive_page(archive, page)
 
 @app.route('/library/<path:path>/cover')
 def cover(path):
@@ -70,8 +88,12 @@ def series_cover(full_path):
 
 def issue_cover(full_path):
     with open_archive(full_path) as archive:
-        cover = next(archive_pages(archive))
-        return archive.read(cover), 200, {'Content-Type': mimetypes.guess_type(cover)[0]}
+        try:
+            cover = next(archive_pages(archive))
+        except StopIteration:
+            abort(404)
+        else:
+            return archive_page(archive, cover)
 
 @app.route('/')
 @app.route('/library/<path:path>')
