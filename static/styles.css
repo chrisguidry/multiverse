@@ -1,0 +1,130 @@
+html, body {
+    background: #222222;
+    margin-top: 1em;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2em;
+    line-height: 2em;
+    z-index: 1000;
+    background: #222222;
+    color: #cccccc;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+}
+header:hover {
+    opacity: 1;
+}
+
+header .tools {
+    text-align: center;
+}
+header .tools a {
+    cursor: pointer;
+}
+header .tools a.active {
+    text-decoration: underline;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 100%;
+    font-weight: normal;
+}
+header a {
+    text-decoration: none;
+    color: #cccccc;
+    transition: color .25s;
+}
+header a:hover {
+    color: #ffffff;
+}
+h1.home {
+    text-align: left;
+}
+h1.title {
+    text-align: right;
+}
+
+
+ol.covers {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ol.covers li {
+    overflow: hidden;
+    height: 26em;
+}
+ol.covers figure {
+    position: relative;
+    height: 26em;
+}
+ol.covers figure figcaption {
+    position: absolute;
+    right: .5em;
+    bottom: .5em;
+    padding: 0 .5em;
+    height: 2em;
+    line-height: 2em;
+    overflow: hidden;
+    text-align: right;
+    color: #ffffff;
+    background: #333333;
+    opacity: 0.5;
+    font-size: .8em;
+
+    transition: opacity 0.25s;
+}
+ol.covers li:hover figure figcaption {
+    opacity: 1;
+}
+
+
+ol#pages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ol#pages li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+ol#pages li img {
+    display: inline-block;
+}
+
+html.fitHeight, html.fitHeight body, ol#pages.fitHeight, ol#pages.fitHeight li {
+    height: 100%;
+}
+html.fitHeight body {
+    margin-top: 0;
+}
+ol#pages.fitHeight li img {
+    max-width: 100%;
+    height: 100%;
+}
+
+html.leftToRight, html.leftToRight body, ol#pages.leftToRight, ol#pages.leftToRight li {
+    height: 100%;
+}
+html.leftToRight body {
+    margin-top: 0;
+}
+ol#pages.leftToRight {
+    display: inline-block;
+    white-space:nowrap;
+}
+ol#pages.leftToRight li {
+    display: inline-block;
+}
+ol#pages.leftToRight li img {
+    max-width: auto;
+    height: 100%;
+}

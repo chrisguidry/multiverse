@@ -2,3 +2,4 @@ __pycache__
 .environment
 configuration.py
 library/*
+.DS_Store

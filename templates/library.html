@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block pageclass %}library{% endblock %}
+{% block content %}
+        <ol id='library' class='covers pure-g'>
+        {% for item in items %}
+            <li class='pure-u-1 pure-u-sm-1-2 pure-u-md-1-3 pure-u-lg-1-5'>
+                <a href='{{item.uri}}'>
+                    <figure>
+                        <img class='cover pure-img' src='{{item.uri}}/cover' />
+                        <figcaption>{{item.title}}</figcaption>
+                    </figure>
+                </a>
+            </li>
+        {% endfor %}
+        </ol>
+{% endblock %}

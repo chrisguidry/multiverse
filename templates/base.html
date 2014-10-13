@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html class='{% block pageclass %}{% endblock %}'>
     <head>
+        <meta charset='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
         <title>{% if title %}{{title}} | {% endif %}Multiverse</title>
+        <link href='{{ url_for('static', filename='pure-0.5.0-min.css') }}' type='text/css' rel='stylesheet' />
+        <link href='{{ url_for('static', filename='grids-responsive-0.5.0-min.css') }}' type='text/css' rel='stylesheet' />
+        <link href='{{ url_for('static', filename='styles.css') }}' type='text/css' rel='stylesheet' />
+        <script async defer src='{{ url_for('static', filename='multiverse.js') }}' type='text/javascript'></script>
     </head>
     <body>
+        <header class='pure-g'>
+            <div class='pure-u-2-5'><h1 class='home'><a href='/'>multiverse</a></h1></div>
+            <div class='tools pure-u-1-5'>
+                {% block tools %}{% endblock %}
+            </div>
+            <div class='pure-u-2-5'><h1 class='title'>{{title}}</h1></div>
+        </header>
         {% block content %}
         {% endblock %}
     </body>

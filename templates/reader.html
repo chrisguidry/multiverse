@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block pageclass %}reader{% endblock %}
+{% block tools %}
+                <div id='displayTools'>
+                    <a id='fitWidth' title='Fit to width [shortcut: 1]' class='active'>w</a>
+                    <a id='twoPages' title='Fit two pages [shortcut: 2]'>2</a>
+                    <a id='fitHeight' title='Fit to height [shortcut: 3]'>h</a>
+                    <a id='leftToRight' title='Left to right [shortcut: 4]'>f</a>
+                </div>
+{% endblock %}
+{% block content %}
+        <ol id='pages' class='pure-g'>
+        {% for page in pages %}
+            <li class='pure-u-1-1'>
+                <a name='{{page.filename}}'></a>
+                <img class='pure-img' src='{{page.uri}}' />
+            </li>
+        {% endfor %}
+        </ol>
+{% endblock %}
