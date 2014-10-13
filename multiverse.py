@@ -8,6 +8,7 @@ import zipfile
 from flask import Flask, abort, render_template, request
 import rarfile
 
+import pdffile
 
 app = Flask(__name__)
 app.config.from_object('configuration')
@@ -17,7 +18,8 @@ mimetypes.add_type('application/x-cbz', '.cbz')
 
 ARCHIVE_TYPES = {
     'application/x-cbr': rarfile.RarFile,
-    'application/x-cbz': zipfile.ZipFile
+    'application/x-cbz': zipfile.ZipFile,
+    'application/pdf': pdffile.PDFFile
 }
 NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
