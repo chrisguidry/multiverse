@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding: utf-8
-import os
 import mimetypes
+import os
 import urllib.parse
 import zipfile
 
@@ -140,4 +140,4 @@ def issue(full_path, library_path):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0')
