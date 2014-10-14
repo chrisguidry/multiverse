@@ -1,6 +1,8 @@
 html, body {
-    background: #222222;
-    margin-top: 1em;
+    background: #111111;
+}
+html, button, input, select, textarea, .pure-g [class *= "pure-u"] {
+    font-family: "Courier New", monospace;
 }
 
 header {
@@ -12,9 +14,9 @@ header {
     height: 2em;
     line-height: 2em;
     z-index: 1000;
-    background: #222222;
-    color: #cccccc;
-    opacity: 0.5;
+    background: #111111;
+    color: #dddddd;
+    opacity: 0;
     transition: opacity 0.25s;
 }
 header:hover {
@@ -33,12 +35,12 @@ header .tools a.active {
 
 header h1 {
     margin: 0;
-    font-size: 100%;
+    font-size: 90%;
     font-weight: normal;
 }
 header a {
     text-decoration: none;
-    color: #cccccc;
+    color: #dddddd;
     transition: color .25s;
 }
 header a:hover {
@@ -75,7 +77,7 @@ ol.covers figure figcaption {
     overflow: hidden;
     text-align: right;
     color: #ffffff;
-    background: #333333;
+    background: #222222;
     opacity: 0.5;
     font-size: .8em;
 
