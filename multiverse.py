@@ -5,7 +5,7 @@ import os
 import urllib.parse
 import zipfile
 
-from flask import Flask, abort, render_template, request
+from flask import Flask, abort, render_template, request, url_for
 import rarfile
 
 import pdffile
@@ -98,6 +98,9 @@ def issue_cover(full_path):
             return archive_page(archive, cover)
 
 @app.route('/')
+def index():
+    return library()
+
 @app.route('/library/<path:path>')
 def library(path=''):
     full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
@@ -116,7 +119,7 @@ def series(full_path, library_path):
         entry_full_path = os.path.join(full_path, filename)
         relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
         items.append({
-            'uri': '/library/' + urllib.parse.quote(relative_path),
+            'uri': url_for('library', path=relative_path),
             'title': archive_title(entry_full_path)
         })
 
@@ -132,7 +135,7 @@ def issue(full_path, library_path):
         context = {
             'title': archive_title(full_path),
             'pages': [{
-                'uri': urllib.parse.quote('/library/%s/pages/%s' % (library_path, page)),
+                'uri': url_for('issue_page', path=library_path, page=page),
                 'filename': urllib.parse.quote(page)
             } for page in archive_pages(archive)]
         }
