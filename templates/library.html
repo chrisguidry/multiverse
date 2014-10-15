@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block pageclass %}library{% endblock %}
+{% block tools %}
+                <form id='search' method='GET' action='{{path}}{% if not path.endswith('/') %}/{% endif %}search'>
+                    <input type='text' name='q' placeholder='search' value='{{query}}' />
+                </form>
+{% endblock %}
 {% block content %}
         <ol id='library' class='covers pure-g'>
         {% for item in items %}

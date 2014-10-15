@@ -71,6 +71,16 @@ h1.title {
     text-align: center;
 }
 
+form#search input {
+    width: 95%;
+    height: 1.5em;
+    border: 1px solid #666666;
+    background: #111111;
+    color: #eeeeee;
+}
+form#search input:focus {
+    outline: #777777 auto 4px;
+}
 
 ol.covers {
     list-style-type: none;

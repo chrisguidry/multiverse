@@ -5,7 +5,7 @@ import os
 import urllib.parse
 import zipfile
 
-from flask import Flask, abort, render_template, request, url_for
+from flask import Flask, abort, render_template, redirect, request, url_for
 import rarfile
 
 import pdffile
@@ -101,6 +101,40 @@ def issue_cover(full_path):
 def index():
     return library()
 
+@app.route('/search')
+def global_search():
+    return search()
+
+@app.route('/library/<path:path>/search')
+def search(path=''):
+    query = request.args.get('q')
+    if not query:
+        return redirect(url_for('library', path=path) if path else url_for('index'))
+
+    full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
+    if not os.path.isdir(full_path):
+        abort(404)
+
+    query = query.lower().replace(' ', '')
+    items = []
+    for root_path, directories, filenames in os.walk(full_path):
+        for collection in [directories, filenames]:
+            for filename in collection:
+                if query in filename.lower().replace(' ', ''):
+                    entry_full_path = os.path.join(root_path, filename)
+                    relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
+                    items.append({
+                        'uri': url_for('library', path=relative_path),
+                        'title': archive_title(entry_full_path)
+                    })
+    context = {
+        'title': 'results for "%s"' % query,
+        'items': items,
+        'query': query,
+        'path': url_for('library', path=path) if path else url_for('index')
+    }
+    return render_template('library.html', **context)
+
 @app.route('/library/<path:path>')
 def library(path=''):
     full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
@@ -125,7 +159,8 @@ def series(full_path, library_path):
 
     context = {
         'title': library_path,
-        'items': items
+        'items': items,
+        'path': url_for('library', path=library_path) if library_path else url_for('index')
     }
     return render_template('library.html', **context)
 
