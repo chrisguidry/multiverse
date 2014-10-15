@@ -31,27 +31,12 @@ header:hover, header.dismissed:hover {
 }
 
 @media screen and (max-width: 35.5em) {
-    .reader header {
-        background: transparent;
-        opacity: 1;
-    }
-    .reader header>div {
-        background: #111111;
-        opacity: 0;
-        transition: opacity 0.25s;
-    }
-    .reader header>div.logo {
-        opacity: .7;
-    }
-    .reader header:hover>div, .reader header.recalled>div {
-        opacity: 1;
-    }
     header h1, header div {
-        font-size: 80%;
+        font-size: 75%;
     }
 }
 
-header.recalled {
+header.recalled, html.leftToRight header.recalled {
     opacity: 1;
 }
 
@@ -151,6 +136,9 @@ html.leftToRight, html.leftToRight body, ol#pages.leftToRight, ol#pages.leftToRi
 }
 html.leftToRight body {
     margin-top: 0;
+}
+html.leftToRight header {
+    opacity: 0;
 }
 ol#pages.leftToRight {
     display: inline-block;
