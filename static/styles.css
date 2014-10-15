@@ -148,6 +148,6 @@ ol#pages.leftToRight li {
     display: inline-block;
 }
 ol#pages.leftToRight li img {
-    max-width: auto;
+    max-width: initial;
     height: 100%;
 }
