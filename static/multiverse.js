@@ -1,9 +1,32 @@
 (function(){
     "use strict";
 
-    var html = document.querySelector('html');
+    var html = document.querySelector('html'),
+        header = document.querySelector('header');
 
     function common() {
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                if (!header.classList.contains('dismissed')) {
+                    header.classList.add('dismissed');
+                }
+            } else {
+                if (header.classList.contains('dismissed')) {
+                    header.classList.remove('dismissed');
+                }
+            }
+
+            if (header.classList.contains('recalled')) {
+                header.classList.remove('recalled');
+            }
+        });
+
+        document.addEventListener('click', function() {
+            header.classList.toggle('recalled');
+        });
+        header.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
     }
 
     function library() {
@@ -40,6 +63,7 @@
         }
 
         displayTools.addEventListener('click', function(event) {
+            event.stopPropagation();
             var tool = event.target;
             if (tool.tagName !== 'A') {
                 return;
