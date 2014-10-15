@@ -46,6 +46,9 @@ header:hover, header.dismissed:hover {
     .reader header:hover>div, .reader header.recalled>div {
         opacity: 1;
     }
+    header h1, header div {
+        font-size: 80%;
+    }
 }
 
 header.recalled {
@@ -53,6 +56,7 @@ header.recalled {
 }
 
 header .tools {
+    font-size: 80%;
     text-align: right;
 }
 header .tools a {
@@ -64,7 +68,7 @@ header .tools a.active {
 
 header h1 {
     margin: 0;
-    font-size: 85%;
+    font-size: 80%;
     font-weight: normal;
 }
 header a {

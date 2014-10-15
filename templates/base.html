@@ -4,6 +4,8 @@
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <title>{% if title %}{{title}} | {% endif %}Multiverse</title>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <link href='{{ url_for('static', filename='pure-release-0.5.0/base-min.css') }}' type='text/css' rel='stylesheet' />
         <link href='{{ url_for('static', filename='pure-release-0.5.0/grids-min.css') }}' type='text/css' rel='stylesheet' />
         <link href='{{ url_for('static', filename='pure-release-0.5.0/grids-responsive-min.css') }}' type='text/css' rel='stylesheet' />
