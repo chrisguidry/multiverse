@@ -43,6 +43,9 @@ def archive_title(archive_path):
     title, _ = os.path.splitext(os.path.basename(archive_path))
     return title
 
+def series_title(series_path):
+    title, _ = os.path.splitext(os.path.basename(series_path))
+    return title
 
 def archive_page(archive, page):
     try:
@@ -97,6 +100,14 @@ def issue_cover(full_path):
         else:
             return archive_page(archive, cover)
 
+def url_of(path):
+    return url_for('library', path=path) if path else url_for('index').strip('/')
+
+def paths_for(path):
+    parts = path.split(os.sep)
+    return [(path, url_for('library', path=os.path.join(*parts[:index+1]))) for
+            index, path in enumerate(parts[:-1])]
+
 @app.route('/')
 def index():
     return library()
@@ -129,9 +140,10 @@ def search(path=''):
                     })
     context = {
         'title': 'results for "%s"' % query,
-        'items': items,
+        'path': url_of(path),
+        'paths': paths_for(path),
         'query': query,
-        'path': url_for('library', path=path) if path else url_for('index')
+        'items': items
     }
     return render_template('library.html', **context)
 
@@ -158,9 +170,10 @@ def series(full_path, library_path):
         })
 
     context = {
-        'title': library_path,
-        'items': items,
-        'path': url_for('library', path=library_path) if library_path else url_for('index')
+        'title': series_title(full_path),
+        'path': url_of(library_path),
+        'paths': paths_for(library_path),
+        'items': items
     }
     return render_template('library.html', **context)
 
@@ -169,6 +182,7 @@ def issue(full_path, library_path):
     with open_archive(full_path) as archive:
         context = {
             'title': archive_title(full_path),
+            'paths': paths_for(library_path),
             'pages': [{
                 'uri': url_for('issue_page', path=library_path, page=page),
                 'filename': urllib.parse.quote(page)

@@ -6,7 +6,7 @@
 
     function common() {
         window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
+            if (window.pageYOffset > 200) {
                 if (!header.classList.contains('dismissed')) {
                     header.classList.add('dismissed');
                 }

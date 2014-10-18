@@ -16,7 +16,7 @@ header {
     left: 0;
     right: 0;
     height: 2em;
-    line-height: 2em;
+    line-height: 1em;
     z-index: 1000;
     background: #111111;
     color: #dddddd;
@@ -64,16 +64,11 @@ header a {
 header a:hover {
     color: #ffffff;
 }
-h1.home {
-    text-align: left;
-}
-h1.title {
-    text-align: center;
-}
 
 form#search input {
+    margin-top: 1px;
     width: 95%;
-    height: 1.5em;
+    height: 2em;
     border: 1px solid #666666;
     background: #111111;
     color: #eeeeee;
