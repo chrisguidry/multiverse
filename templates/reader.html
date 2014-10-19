@@ -16,5 +16,15 @@
                 <img class='pure-img' src='{{page.uri}}' />
             </li>
         {% endfor %}
+        {% if next_issue %}
+            <li class='next-issue pure-u-1-1'>
+                <a href='{{next_issue.uri}}'>
+                <figure>
+                    <img class='pure-img' src='{{next_issue.uri}}/cover' />
+                    <figcaption><span>Next: {{next_issue.title}}</span></figcaption>
+                </figure>
+                </a>
+            </li>
+        {% endif %}
         </ol>
 {% endblock %}

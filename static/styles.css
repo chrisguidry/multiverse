@@ -103,7 +103,6 @@ ol.covers figure figcaption {
     background: #222222;
     opacity: 0.5;
     font-size: .8em;
-
     transition: opacity 0.25s;
 }
 ol.covers li:hover figure figcaption {
@@ -131,12 +130,12 @@ html.fitHeight, html.fitHeight body, ol#pages.fitHeight, ol#pages.fitHeight li {
 html.fitHeight body {
     margin-top: 0;
 }
-ol#pages.fitHeight li img {
+ol#pages.fitHeight li img, ol#pages.fitHeight li figure, ol#pages.fitHeight li figure img {
     max-width: 100%;
     height: 100%;
 }
 
-html.leftToRight, html.leftToRight body, ol#pages.leftToRight, ol#pages.leftToRight li {
+html.leftToRight, html.leftToRight body, ol#pages.leftToRight, ol#pages.leftToRight li, ol#pages.leftToRight li figure {
     height: 100%;
 }
 html.leftToRight body {
@@ -149,10 +148,36 @@ ol#pages.leftToRight {
     display: inline-block;
     white-space:nowrap;
 }
-ol#pages.leftToRight li {
+ol#pages.leftToRight li, ol#pages.leftToRight li figure {
     display: inline-block;
 }
-ol#pages.leftToRight li img {
+ol#pages.leftToRight li img, ol#pages.leftToRight li figure img {
     max-width: initial;
     height: 100%;
+}
+
+ol#pages li.next-issue figure {
+    position: relative;
+}
+ol#pages li.next-issue figure figcaption {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding-top: 6em;
+    overflow: hidden;
+    text-align: center;
+}
+ol#pages li.next-issue figure figcaption span {
+    display: inline-block;
+    padding: 1em;
+    line-height: 2em;
+    color: #ffffff;
+    background: #222222;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+}
+ol#pages li.next-issue:hover figure figcaption span {
+    opacity: 1;
 }

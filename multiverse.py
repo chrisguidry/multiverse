@@ -47,6 +47,19 @@ def series_title(series_path):
     title, _ = os.path.splitext(os.path.basename(series_path))
     return title
 
+def series_issues(series_path):
+    for path, _, filenames in os.walk(series_path):
+        for filename in filenames:
+            if mimetypes.guess_type(filename)[0] not in ARCHIVE_TYPES:
+                continue
+            yield os.path.join(path, filename)
+
+def next_issue(archive_path):
+    series_path, archive_name = os.path.split(archive_path)
+    for issue_path in series_issues(series_path):
+        if issue_path > archive_path:
+            return issue_path
+
 def archive_page(archive, page):
     try:
         archive_info = archive.getinfo(page)
@@ -82,13 +95,11 @@ def cover(path):
     abort(404)
 
 def series_cover(full_path):
-    for path, _, filenames in os.walk(full_path):
-        for filename in filenames:
-            if mimetypes.guess_type(filename)[0] in ARCHIVE_TYPES:
-                try:
-                    return issue_cover(os.path.join(path, filename))
-                except Exception:
-                    continue
+    for archive_path in series_issues(full_path):
+        try:
+            return issue_cover(archive_path)
+        except Exception as e:
+            continue
     abort(404)
 
 def issue_cover(full_path):
@@ -131,13 +142,19 @@ def search(path=''):
     for root_path, directories, filenames in os.walk(full_path):
         for collection in [directories, filenames]:
             for filename in collection:
-                if query in filename.lower().replace(' ', ''):
-                    entry_full_path = os.path.join(root_path, filename)
-                    relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
-                    items.append({
-                        'uri': url_for('library', path=relative_path),
-                        'title': archive_title(entry_full_path)
-                    })
+                if query not in filename.lower().replace(' ', ''):
+                    continue
+
+                entry_full_path = os.path.join(root_path, filename)
+                if mimetypes.guess_type(entry_full_path)[0] not in ARCHIVE_TYPES:
+                    continue
+
+                relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
+                items.append({
+                    'uri': url_for('library', path=relative_path),
+                    'title': archive_title(entry_full_path)
+                })
+
     context = {
         'title': 'results for "%s"' % query,
         'path': url_of(path),
@@ -159,10 +176,12 @@ def library(path=''):
 def series(full_path, library_path):
     items = []
     for filename in sorted(os.listdir(full_path)):
+        entry_full_path = os.path.join(full_path, filename)
         if filename.startswith('.'):
             continue
+        if os.path.isfile(entry_full_path) and mimetypes.guess_type(filename)[0] not in ARCHIVE_TYPES:
+            continue
 
-        entry_full_path = os.path.join(full_path, filename)
         relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
         items.append({
             'uri': url_for('library', path=relative_path),
@@ -178,7 +197,14 @@ def series(full_path, library_path):
     return render_template('library.html', **context)
 
 def issue(full_path, library_path):
-    series_path, archive_name = os.path.split(full_path)
+    next_archive = next_issue(full_path)
+    next = None
+    if next_archive:
+        next = {
+            'uri': url_for('library', path=os.path.relpath(next_archive, app.config['LIBRARY_ROOT'])),
+            'title': archive_title(next_archive)
+        }
+
     with open_archive(full_path) as archive:
         context = {
             'title': archive_title(full_path),
@@ -186,7 +212,8 @@ def issue(full_path, library_path):
             'pages': [{
                 'uri': url_for('issue_page', path=library_path, page=page),
                 'filename': urllib.parse.quote(page)
-            } for page in archive_pages(archive)]
+            } for page in archive_pages(archive)],
+            'next_issue': next
         }
     return render_template('reader.html', **context)
 
