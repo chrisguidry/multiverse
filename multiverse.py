@@ -110,7 +110,8 @@ def issue_cover(full_path):
         except StopIteration:
             abort(404)
         else:
-            return archive_page(archive, cover)
+            relative_path = os.path.relpath(full_path, app.config['LIBRARY_ROOT'])
+            return redirect(url_for('issue_page', path=relative_path, page=cover), code=301)
 
 def url_of(path):
     return url_for('library', path=path) if path else url_for('index').strip('/')
