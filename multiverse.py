@@ -111,7 +111,7 @@ def issue_cover(full_path):
             abort(404)
         else:
             relative_path = os.path.relpath(full_path, app.config['LIBRARY_ROOT'])
-            return redirect(url_for('issue_page', path=relative_path, page=cover), code=301)
+            return redirect(url_for('issue_page', path=relative_path, page=cover), code=302)
 
 def url_of(path):
     return url_for('library', path=path) if path else url_for('index').strip('/')
