@@ -2,10 +2,34 @@
 {% block pageclass %}reader{% endblock %}
 {% block tools %}
                 <div id='displayTools'>
-                    <a id='fitWidth' title='Fit to width [shortcut: 1]' class='active'>w</a>
-                    <a id='twoPages' title='Fit two pages [shortcut: 2]'>2</a>
-                    <a id='fitHeight' title='Fit to height [shortcut: 3]'>h</a>
-                    <a id='leftToRight' title='Left to right [shortcut: 4]'>f</a>
+                    <a id='fitWidth' class='layout' title='Fit to width [shortcut: 1]' class='active'>
+                        <!-- action/ic_view_stream_48px.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <path d="M8 36h34v-12h-34v12zm0-26v12h34v-12h-34z"/>
+                            <path d="M0 0h48v48h-48z" fill="none"/>
+                        </svg>
+                    </a>
+                    <a id='twoPages' class='layout' title='Fit two pages [shortcut: 2]'>
+                        <!-- editor/ic_insert_drive_file_48px.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <path d="M0 0h48v48h-48z" fill="none"/>
+                            <path d="M6 26h16v-20h-16v20zm0 16h16v-12h-16v12zm20 0h16v-20h-16v20zm0-36v12h16v-12h-16z"/>
+                        </svg>
+                    </a>
+                    <a id='fitHeight' class='layout' title='Fit to height [shortcut: 3]'>
+                        <!-- editor/ic_insert_drive_file_48px.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <path d="M12 4c-2.21 0-3.98 1.79-3.98 4l-.02 32c0 2.21 1.77 4 3.98 4h24.02c2.21 0 4-1.79 4-4v-24l-12-12h-16zm14 14v-11l11 11h-11z"/>
+                            <path d="M0 0h48v48h-48z" fill="none"/>
+                        </svg>
+                    </a>
+                    <a id='leftToRight' class='layout' title='Left to right [shortcut: 4]'>
+                        <!-- action/ic_view_array_48px.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <path d="M8 36h6v-26h-6v26zm28-26v26h6v-26h-6zm-20 26h18v-26h-18v26z"/>
+                            <path d="M0 0h48v48h-48z" fill="none"/>
+                        </svg>
+                    </a>
                 </div>
 {% endblock %}
 {% block content %}

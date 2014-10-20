@@ -1,7 +1,11 @@
 multiverse, a self-hosted comic reader
 ======================================
 
-Requires Python 3.4.
+Requires Python 3.4.  Installation will install [Flask (0.10.1)](http://flask.pocoo.org/)
+and [rarfile (2.6)](https://pypi.python.org/pypi/rarfile/2.2).
+
+Includes the [Pure CSS library (0.5)](http://purecss.io/) and
+[Google's Material Design icons (1.0)](https://github.com/google/material-design-icons/).
 
 
 Basic Setup and Installation

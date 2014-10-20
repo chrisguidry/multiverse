@@ -2,6 +2,7 @@
 #coding: utf-8
 import mimetypes
 import os
+import sys
 import urllib.parse
 import zipfile
 
@@ -219,4 +220,10 @@ def issue(full_path, library_path):
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0')
+    bind_address, bind_port = None, None
+    if len(sys.argv) == 2:
+        if ':' in sys.argv[1]:
+            bind_address, bind_port = sys.argv[1].split(':')
+        else:
+            bind_address = sys.argv[1]
+    app.run(host=bind_address or '127.0.0.1', port=int(bind_port or 5000))

@@ -43,12 +43,20 @@ header.recalled, html.leftToRight header.recalled {
 header .tools {
     font-size: 80%;
     text-align: right;
+    height: 2.5em;
 }
 header .tools a {
     cursor: pointer;
+    display: inline-block;
+    height: 100%;
 }
-header .tools a.active {
-    text-decoration: underline;
+header .tools svg {
+    height: 2em;
+    margin-top: 0.25em;
+    fill: #888888;
+}
+header .tools a.active svg {
+    fill: #ffffff;
 }
 
 header h1 {
