@@ -35,10 +35,7 @@
     function reader() {
         var pageList = document.getElementById('pages'),
             displayTools = document.getElementById('displayTools'),
-            displayClasses = [].map.call(displayTools.querySelectorAll('a'), function(el) { return el.id; }),
-            toggleOrientationLock = document.getElementById('toggleOrientationLock'),
-            orientationLocked = document.getElementById('orientationLocked'),
-            orientationUnlocked = document.getElementById('orientationUnlocked');
+            displayClasses = [].map.call(displayTools.querySelectorAll('a'), function(el) { return el.id; });
 
         function selectDisplay(tool) {
             [].forEach.call(document.querySelectorAll('#displayTools>a'), function(otherTool) {
@@ -98,37 +95,6 @@
             var initialTool = document.getElementById(localStorage['display'] || 'fitWidth') ||
                               document.getElementById('fitWidth');
             selectDisplay(initialTool);
-        }
-
-        function lockOrientation() {
-            localStorage['lockOrientation'] = true;
-            orientationUnlocked.classList.remove('active');
-            orientationLocked.classList.add('active');
-            screen.lockOrientation(screen.orientation);
-        }
-        function unlockOrientation() {
-            delete localStorage['lockOrientation'];
-            orientationUnlocked.classList.add('active');
-            orientationLocked.classList.remove('active');
-            screen.unlockOrientation();
-        }
-
-        orientationLocked.addEventListener('click', function(event) {
-            event.stopPropagation();
-            unlockOrientation();
-        });
-        orientationUnlocked.addEventListener('click', function(event) {
-            event.stopPropagation();
-            lockOrientation();
-        });
-
-        if (typeof(screen.lockOrientation) === 'function') {
-            toggleOrientationLock.classList.add('available');
-            if (localStorage.getItem('lockOrientation')) {
-                lockOrientation();
-            } else {
-                unlockOrientation();
-            }
         }
     }
 
