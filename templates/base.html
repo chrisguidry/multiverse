@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='{% block pageclass %}{% endblock %}'{% block manifest %}manifest='{{ url_for('application_manifest') }}'{% endblock %}>
+<html class='{% block pageclass %}{% endblock %}'{% if manifest_url %}manifest='{{ manifest_url }}'{% endif %}>
     <head>
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />

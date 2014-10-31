@@ -183,6 +183,9 @@ def issue_cover(full_path):
 def url_of(path):
     return url_for('library', path=path) if path else url_for('index').strip('/')
 
+def manifest_url(path):
+    return url_for('manifest', path=path) if path else url_for('global_manifest').strip('/')
+
 def paths_for(path):
     parts = path.split(os.sep)
     return [(path, url_for('library', path=os.path.join(*parts[:index+1]))) for
@@ -191,6 +194,10 @@ def paths_for(path):
 @app.route('/')
 def index():
     return library()
+
+@app.route('/manifest')
+def global_manifest():
+    return manifest()
 
 @app.route('/search')
 def global_search():
@@ -230,8 +237,7 @@ def search(path=''):
         'path': url_of(path),
         'paths': paths_for(path),
         'query': query,
-        'items': items,
-        'online_only': True
+        'items': items
     }
     return render_template('library.html', **context)
 
@@ -263,6 +269,7 @@ def series(full_path, library_path):
     context = {
         'title': series_title(full_path),
         'path': url_of(library_path),
+        'manifest_url': manifest_url(path),
         'paths': paths_for(library_path),
         'items': items
     }
@@ -281,6 +288,7 @@ def issue(full_path, library_path):
     with open_archive(full_path) as archive:
         context = {
             'title': archive_title(full_path),
+            'manifest_url': manifest_url(path),
             'path': url_of(library_path),
             'paths': paths_for(library_path),
             'pages': [{
