@@ -39,7 +39,7 @@ NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
 
-forced_version = '-3'
+forced_version = '-4'
 _version = None
 def code_version():
     global _version
@@ -187,7 +187,7 @@ def search_url(path):
     return url_for('search', path=path) if path else url_for('global_search')
 
 def manifest_url(path):
-    return url_for('manifest', path=path) if path else url_for('global_manifest')
+    return url_for('library_manifest', path=path) if path else url_for('global_manifest')
 
 def paths_for(path):
     parts = path.split(os.sep)
