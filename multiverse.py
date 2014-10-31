@@ -269,7 +269,7 @@ def series(full_path, library_path):
     context = {
         'title': series_title(full_path),
         'path': url_of(library_path),
-        'manifest_url': manifest_url(path),
+        'manifest_url': manifest_url(library_path),
         'paths': paths_for(library_path),
         'items': items
     }
@@ -288,7 +288,7 @@ def issue(full_path, library_path):
     with open_archive(full_path) as archive:
         context = {
             'title': archive_title(full_path),
-            'manifest_url': manifest_url(path),
+            'manifest_url': manifest_url(library_path),
             'path': url_of(library_path),
             'paths': paths_for(library_path),
             'pages': [{
