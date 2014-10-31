@@ -39,7 +39,7 @@ NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
 
-forced_version = '-1'
+forced_version = '-3'
 _version = None
 def code_version():
     global _version
@@ -181,10 +181,13 @@ def issue_cover(full_path):
             return url_for('issue_page', path=relative_path, page=cover)
 
 def url_of(path):
-    return url_for('library', path=path) if path else url_for('index').strip('/')
+    return url_for('library', path=path) if path else url_for('index')
+
+def search_url(path):
+    return url_for('search', path=path) if path else url_for('global_search')
 
 def manifest_url(path):
-    return url_for('manifest', path=path) if path else url_for('global_manifest').strip('/')
+    return url_for('manifest', path=path) if path else url_for('global_manifest')
 
 def paths_for(path):
     parts = path.split(os.sep)
@@ -270,6 +273,7 @@ def series(full_path, library_path):
         'title': series_title(full_path),
         'path': url_of(library_path),
         'manifest_url': manifest_url(library_path),
+        'search_url': search_url(library_path),
         'paths': paths_for(library_path),
         'items': items
     }
