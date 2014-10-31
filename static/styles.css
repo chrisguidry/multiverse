@@ -44,6 +44,7 @@ header .tools {
     font-size: 80%;
     text-align: right;
     height: 2.5em;
+    white-space:nowrap;
 }
 header .tools a {
     cursor: pointer;
@@ -57,6 +58,14 @@ header .tools svg {
 }
 header .tools a.active svg {
     fill: #ffffff;
+}
+header #refresh {
+    fill: #ffffff;
+    opacity: 0;
+    transition: opacity 1s;
+}
+header #refresh.applicable {
+    opacity: 1;
 }
 
 header h1 {
@@ -73,10 +82,23 @@ header a:hover {
     color: #ffffff;
 }
 
-form#search input {
-    margin-top: 1px;
-    width: 95%;
+header div#displayTools {
+    display: inline-block;
+}
+
+form#search {
+    display: inline-block;
+    position: relative;
+    top: -6px;
+    width: 200px;
     height: 2em;
+    margin-top: 0.25em;
+}
+form#search input {
+    width: 95%;
+    margin-top: 1px;
+    height: 2em;
+    height: 100%;
     border: 1px solid #666666;
     background: #111111;
     color: #eeeeee;

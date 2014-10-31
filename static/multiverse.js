@@ -27,6 +27,18 @@
         header.addEventListener('click', function(event) {
             event.stopPropagation();
         });
+
+        var refreshIcon = document.getElementById('refresh');
+        refreshIcon.addEventListener('click', function(event) {
+            window.location.reload();
+        });
+        function onUpdateReady() {
+            refreshIcon.classList.add('applicable');
+        }
+        applicationCache.addEventListener('updateready', onUpdateReady);
+        if (applicationCache.status === window.applicationCache.UPDATEREADY) {
+            onUpdateReady();
+        }
     }
 
     function library() {

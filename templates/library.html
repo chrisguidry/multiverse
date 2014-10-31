@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block manifest %}{% if not online_only %}manifest='{{ path }}/manifest'{% endif %}{% endblock %}
 {% block pageclass %}library{% endblock %}
 {% block tools %}
                 <form id='search' method='GET' action='{{path}}/search'>
@@ -11,7 +12,7 @@
             <li class='pure-u-1 pure-u-sm-1-2 pure-u-md-1-3 pure-u-lg-1-5'>
                 <a href='{{item.uri}}'>
                     <figure>
-                        <img class='cover pure-img' src='{{item.uri}}/cover' />
+                        <img class='cover pure-img' src='{{item.cover}}' />
                         <figcaption>{{item.title}}</figcaption>
                     </figure>
                 </a>

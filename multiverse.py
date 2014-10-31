@@ -39,11 +39,12 @@ NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
 
+forced_version = '-1'
 _version = None
 def code_version():
     global _version
     if not _version:
-        _version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+        _version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8') + forced_version
     return _version
 
 def open_archive(full_path):
@@ -107,27 +108,42 @@ def issue_page(path, page):
         return archive_page(archive, page)
 
 @app.route('/manifest')
-def application_manifest():
+@app.route('/library/<path:path>/manifest')
+def library_manifest(path=''):
+    full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
+    if os.path.isdir(full_path):
+        return series_manifest(full_path, path)
+    elif os.path.isfile(full_path):
+        return issue_manifest(full_path, path)
+    abort(404)
+
+def series_manifest(full_path, library_path):
+    covers = []
+    for filename in sorted(os.listdir(full_path)):
+        entry_full_path = os.path.join(full_path, filename)
+        if filename.startswith('.'):
+            continue
+        if os.path.isfile(entry_full_path) and mimetypes.guess_type(filename)[0] not in ARCHIVE_TYPES:
+            continue
+        covers.append(cover(entry_full_path))
+
     context = {
-        'version': code_version()
+        'version': code_version(),
+        'covers': covers
     }
+
     headers = {
         'Content-Type': 'text/cache-manifest',
         'Cache-Control': 'no-store'
     }
-    return render_template('base.manifest', **context), 200, headers
+    return render_template('library.manifest', **context), 200, headers
 
-@app.route('/library/<path:path>/manifest')
-def issue_manifest(path):
-    full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
-    if not os.path.isfile(full_path):
-        abort(404)
-
+def issue_manifest(full_path, library_path):
     with open_archive(full_path) as archive:
         context = {
             'version': code_version(),
             'pages': [
-                url_for('issue_page', path=path, page=page)
+                url_for('issue_page', path=library_path, page=page)
                 for page in archive_pages(archive)
             ]
         }
@@ -138,7 +154,6 @@ def issue_manifest(path):
     }
     return render_template('issue.manifest', **context), 200, headers
 
-@app.route('/library/<path:path>/cover')
 def cover(path):
     full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
     if os.path.isdir(full_path):
@@ -163,7 +178,7 @@ def issue_cover(full_path):
             abort(404)
         else:
             relative_path = os.path.relpath(full_path, app.config['LIBRARY_ROOT'])
-            return redirect(url_for('issue_page', path=relative_path, page=cover), code=302)
+            return url_for('issue_page', path=relative_path, page=cover)
 
 def url_of(path):
     return url_for('library', path=path) if path else url_for('index').strip('/')
@@ -206,7 +221,8 @@ def search(path=''):
                 relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
                 items.append({
                     'uri': url_for('library', path=relative_path),
-                    'title': archive_title(entry_full_path)
+                    'title': archive_title(entry_full_path),
+                    'cover': cover(entry_full_path)
                 })
 
     context = {
@@ -214,7 +230,8 @@ def search(path=''):
         'path': url_of(path),
         'paths': paths_for(path),
         'query': query,
-        'items': items
+        'items': items,
+        'online_only': True
     }
     return render_template('library.html', **context)
 
@@ -239,7 +256,8 @@ def series(full_path, library_path):
         relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
         items.append({
             'uri': url_for('library', path=relative_path),
-            'title': archive_title(entry_full_path)
+            'title': archive_title(entry_full_path),
+            'cover': cover(entry_full_path)
         })
 
     context = {
@@ -256,7 +274,8 @@ def issue(full_path, library_path):
     if next_archive:
         next = {
             'uri': url_for('library', path=os.path.relpath(next_archive, app.config['LIBRARY_ROOT'])),
-            'title': archive_title(next_archive)
+            'title': archive_title(next_archive),
+            'cover': cover(next_archive)
         }
 
     with open_archive(full_path) as archive:
