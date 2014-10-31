@@ -2,17 +2,30 @@
 #coding: utf-8
 import mimetypes
 import os
+import subprocess
 import sys
 import urllib.parse
 import zipfile
 
 from flask import Flask, abort, render_template, redirect, request, url_for
+from flask.ext.assets import Environment, Bundle
 import rarfile
 
 import pdffile
 
 app = Flask(__name__)
 app.config.from_object('configuration')
+
+assets = Environment(app)
+assets.register('stylesheets', Bundle('third-party/pure-release-0.5.0/base-min.css',
+                                      'third-party/pure-release-0.5.0/grids-min.css',
+                                      'third-party/pure-release-0.5.0/grids-responsive-min.css',
+                                      'styles.css',
+                                      filters='cssmin' if not app.config['DEBUG'] else None,
+                                      output='build/styles.css'))
+assets.register('javascripts', Bundle('multiverse.js',
+                                      filters='rjsmin' if not app.config['DEBUG'] else None,
+                                      output='build/multiverse.js'))
 
 mimetypes.add_type('application/x-cbr', '.cbr')
 mimetypes.add_type('application/x-cbz', '.cbz')
@@ -25,6 +38,13 @@ ARCHIVE_TYPES = {
 NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
+
+_version = None
+def code_version():
+    global _version
+    if not _version:
+        _version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    return _version
 
 def open_archive(full_path):
     mimetype, _ = mimetypes.guess_type(full_path)
@@ -85,6 +105,38 @@ def issue_page(path, page):
 
     with open_archive(full_path) as archive:
         return archive_page(archive, page)
+
+@app.route('/manifest')
+def application_manifest():
+    context = {
+        'version': code_version()
+    }
+    headers = {
+        'Content-Type': 'text/cache-manifest',
+        'Cache-Control': 'no-store'
+    }
+    return render_template('base.manifest', **context), 200, headers
+
+@app.route('/library/<path:path>/manifest')
+def issue_manifest(path):
+    full_path = os.path.join(app.config['LIBRARY_ROOT'], path)
+    if not os.path.isfile(full_path):
+        abort(404)
+
+    with open_archive(full_path) as archive:
+        context = {
+            'version': code_version(),
+            'pages': [
+                url_for('issue_page', path=path, page=page)
+                for page in archive_pages(archive)
+            ]
+        }
+
+    headers = {
+        'Content-Type': 'text/cache-manifest',
+        'Cache-Control': 'no-store'
+    }
+    return render_template('issue.manifest', **context), 200, headers
 
 @app.route('/library/<path:path>/cover')
 def cover(path):
@@ -210,6 +262,7 @@ def issue(full_path, library_path):
     with open_archive(full_path) as archive:
         context = {
             'title': archive_title(full_path),
+            'path': url_of(library_path),
             'paths': paths_for(library_path),
             'pages': [{
                 'uri': url_for('issue_page', path=library_path, page=page),

@@ -1,2 +1,4 @@
 Flask==0.10.1
 rarfile==2.6
+Flask-Assets==0.10
+cssmin==0.2.0

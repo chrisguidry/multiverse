@@ -5,3 +5,5 @@ uwsgi.ini
 library/*
 library.local
 .DS_Store
+static/.webassets-cache
+static/build

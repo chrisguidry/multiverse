@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='{% block pageclass %}{% endblock %}'>
+<html class='{% block pageclass %}{% endblock %}'{% block manifest %}manifest='{{ url_for('application_manifest') }}'{% endblock %}>
     <head>
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -8,11 +8,9 @@
         <link rel="apple-touch-icon" href="{{ url_for('static', filename='multiverse.png') }}">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link href='{{ url_for('static', filename='third-party/pure-release-0.5.0/base-min.css') }}' type='text/css' rel='stylesheet' />
-        <link href='{{ url_for('static', filename='third-party/pure-release-0.5.0/grids-min.css') }}' type='text/css' rel='stylesheet' />
-        <link href='{{ url_for('static', filename='third-party/pure-release-0.5.0/grids-responsive-min.css') }}' type='text/css' rel='stylesheet' />
-        <link href='{{ url_for('static', filename='styles.css') }}' type='text/css' rel='stylesheet' />
-        <script async defer src='{{ url_for('static', filename='multiverse.js') }}' type='text/javascript'></script>
+        {% assets "stylesheets" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" />{% endassets %}
+        {% assets "javascripts" %}<script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
     </head>
     <body>
         <header class='pure-g'>

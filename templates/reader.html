@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block pageclass %}reader{% endblock %}
+{% block manifest %}manifest='{{ path }}/manifest'{% endblock %}
 {% block tools %}
                 <div id='displayTools'>
                     <a id='fitWidth' class='layout' title='Fit to width [shortcut: 1]' class='active'>

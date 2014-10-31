@@ -2,5 +2,6 @@
 import os.path
 
 DEBUG = False
+ASSETS_DEBUG = False
 LIBRARY_ROOT = os.path.abspath('./library')
 APPLICATION_ROOT = None # may be /multiverse, for example, if running in a subdirectory

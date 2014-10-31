@@ -1,0 +1,14 @@
+CACHE MANIFEST
+# {{ version }}
+
+CACHE:
+{{ url_for('static', filename='multiverse.png') }}
+{% assets "stylesheets" %}
+{{ ASSET_URL }}{% endassets %}
+{% assets "javascripts" %}
+{{ ASSET_URL }}
+{% endassets %}
+{% block explicit %}
+{% endblock %}
+NETWORK:
+*
