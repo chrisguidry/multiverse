@@ -125,7 +125,10 @@ def series_manifest(full_path, library_path):
             continue
         if os.path.isfile(entry_full_path) and mimetypes.guess_type(filename)[0] not in ARCHIVE_TYPES:
             continue
-        covers.append(cover(entry_full_path))
+        entry_cover = cover(entry_full_path)
+        if not entry_cover:
+            continue
+        covers.append(entry_cover)
 
     context = {
         'version': code_version(),
@@ -160,22 +163,21 @@ def cover(path):
         return series_cover(full_path)
     elif os.path.isfile(full_path):
         return issue_cover(full_path)
-    abort(404)
+    return None
 
 def series_cover(full_path):
     for archive_path in series_issues(full_path):
-        try:
-            return issue_cover(archive_path)
-        except Exception as e:
-            continue
-    abort(404)
+        cover = issue_cover(archive_path)
+        if cover:
+            return cover
+    return None
 
 def issue_cover(full_path):
     with open_archive(full_path) as archive:
         try:
             cover = next(archive_pages(archive))
         except StopIteration:
-            abort(404)
+            return None
         else:
             relative_path = os.path.relpath(full_path, app.config['LIBRARY_ROOT'])
             return url_for('issue_page', path=relative_path, page=cover)
@@ -229,10 +231,13 @@ def search(path=''):
                     continue
 
                 relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
+                entry_cover = cover(entry_full_path)
+                if not entry_cover:
+                    continue
                 items.append({
                     'uri': url_for('library', path=relative_path),
                     'title': archive_title(entry_full_path),
-                    'cover': cover(entry_full_path)
+                    'cover': entry_cover
                 })
 
     context = {
@@ -262,11 +267,15 @@ def series(full_path, library_path):
         if os.path.isfile(entry_full_path) and mimetypes.guess_type(filename)[0] not in ARCHIVE_TYPES:
             continue
 
+        entry_cover = cover(entry_full_path)
+        if not entry_cover:
+            continue
+
         relative_path = os.path.relpath(entry_full_path, app.config['LIBRARY_ROOT'])
         items.append({
             'uri': url_for('library', path=relative_path),
             'title': archive_title(entry_full_path),
-            'cover': cover(entry_full_path)
+            'cover': entry_cover
         })
 
     context = {
@@ -283,11 +292,13 @@ def issue(full_path, library_path):
     next_archive = next_issue(full_path)
     next = None
     if next_archive:
-        next = {
-            'uri': url_for('library', path=os.path.relpath(next_archive, app.config['LIBRARY_ROOT'])),
-            'title': archive_title(next_archive),
-            'cover': cover(next_archive)
-        }
+        next_cover = cover(next_archive)
+        if next_cover:
+            next = {
+                'uri': url_for('library', path=os.path.relpath(next_archive, app.config['LIBRARY_ROOT'])),
+                'title': archive_title(next_archive),
+                'cover': next_cover
+            }
 
     with open_archive(full_path) as archive:
         context = {
