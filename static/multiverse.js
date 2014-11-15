@@ -28,16 +28,33 @@
             event.stopPropagation();
         });
 
-        var refreshIcon = document.getElementById('refresh');
-        refreshIcon.addEventListener('click', function(event) {
+        var refresh = document.getElementById('refresh');
+        refresh.addEventListener('click', function(event) {
             window.location.reload();
         });
         function onUpdateReady() {
-            refreshIcon.classList.add('applicable');
+            refresh.classList.add('applicable');
         }
         applicationCache.addEventListener('updateready', onUpdateReady);
         if (applicationCache.status === window.applicationCache.UPDATEREADY) {
             onUpdateReady();
+        }
+
+        if (document.webkitFullscreenEnabled) {
+            var fullscreen = document.getElementById('fullscreen');
+            fullscreen.classList.add('applicable');
+
+            fullscreen.addEventListener('click', function(event) {
+                html.webkitRequestFullScreen();
+            });
+
+            document.addEventListener('webkitfullscreenchange', function() {
+                if (document.webkitIsFullScreen) {
+                    fullscreen.classList.remove('applicable');
+                } else {
+                    fullscreen.classList.add('applicable');
+                }
+            });
         }
     }
 

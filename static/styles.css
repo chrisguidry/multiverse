@@ -59,12 +59,26 @@ header .tools svg {
 header .tools a.active svg {
     fill: #ffffff;
 }
+
 header #refresh {
     fill: #ffffff;
     opacity: 0;
+    visibility: hidden;
     transition: opacity 1s;
 }
 header #refresh.applicable {
+    visibility: visible;
+    opacity: 1;
+}
+
+header #fullscreen {
+    fill: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s;
+}
+header #fullscreen.applicable {
+    visibility: visible;
     opacity: 1;
 }
 
