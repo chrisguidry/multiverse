@@ -1,7 +1,7 @@
 #coding: utf-8
 import os
 
-if os.environ.get('ENV') == 'development':
+if os.environ.get('ENV') == 'development' or os.environ.get('DEBUG'):
     DEBUG = True
     ASSETS_DEBUG = True
 else:
