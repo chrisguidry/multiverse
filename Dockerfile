@@ -15,6 +15,9 @@ RUN echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty multiverse' >> /etc/ap
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 
+RUN adduser --system --uid 1000 multiverse --no-create-home --disabled-login
+USER multiverse
+
 ADD . /multiverse
 VOLUME /multiverse
 VOLUME /library
