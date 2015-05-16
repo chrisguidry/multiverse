@@ -19,7 +19,7 @@ ADD . /multiverse
 VOLUME /multiverse
 VOLUME /library
 
-CMD uwsgi --ini /multiverse/uwsgi.ini
+CMD /multiverse/webserver
 
 # 3333: web, 4444: uwsgi stats
 EXPOSE 3333 4444
