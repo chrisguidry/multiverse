@@ -39,12 +39,12 @@ NOT_FOUND_EXCEPTIONS = (rarfile.NoRarEntry, KeyError)
 WEB_IMAGE_TYPES = {'image/png', 'image/jpeg'}
 
 
-forced_version = '-4'
 _version = None
 def code_version():
     global _version
     if not _version:
-        _version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8') + forced_version
+        _version = subprocess.check_output('find -type f -exec md5sum {} \; | md5sum', shell=True)
+        _version = _version.strip().decode('utf-8')
     return _version
 
 def open_archive(full_path):

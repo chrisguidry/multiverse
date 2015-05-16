@@ -1,8 +1,4 @@
 __pycache__
-.environment
-configuration.py
-uwsgi.ini
-library/*
 library.local
 .DS_Store
 static/.webassets-cache

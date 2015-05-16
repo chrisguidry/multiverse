@@ -1,7 +1,7 @@
 #coding: utf-8
 import os.path
 
-DEBUG = False
+DEBUG = True
 ASSETS_DEBUG = False
-LIBRARY_ROOT = os.path.abspath('./library')
+LIBRARY_ROOT = '/library'
 APPLICATION_ROOT = None # may be /multiverse, for example, if running in a subdirectory
