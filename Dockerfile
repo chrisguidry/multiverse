@@ -21,5 +21,5 @@ VOLUME /library
 
 CMD /multiverse/webserver
 
-# 3333: web, 4444: uwsgi stats
+# 3333: web, 4444: uwsgi
 EXPOSE 3333 4444
