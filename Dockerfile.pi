@@ -32,7 +32,7 @@ ADD . /multiverse
 VOLUME /multiverse
 VOLUME /library
 
-CMD /multiverse/webserver
+ENTRYPOINT [/multiverse/webserver]
 
 # 3333: web, 4444: uwsgi
 EXPOSE 3333 4444
