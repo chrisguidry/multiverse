@@ -9,5 +9,5 @@ if [ "$ENV" = 'development' ]; then
         python3.4 ./multiverse.py 0.0.0.0:3333 || true
     done
 else
-    uwsgi --ini /multiverse/uwsgi.ini
+    uwsgi --ini /multiverse/uwsgi.ini "$@"
 fi
