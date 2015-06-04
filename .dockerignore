@@ -1,1 +1,8 @@
 library.local
+.git
+__pycache__
+.DS_Store
+Dockerfile
+Dockerfile.pi
+static/.webassets-cache
+static/build
