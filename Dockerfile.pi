@@ -1,0 +1,38 @@
+FROM resin/rpi-raspbian:jessie
+MAINTAINER chris@theguidrys.us
+
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    apt-get install -y \
+        python3.4 \
+        python3-pip \
+        uwsgi \
+        uwsgi-plugin-python3 \
+        curl build-essential make gcc \
+    && \
+    curl http://www.rarlab.com/rar/unrarsrc-5.2.7.tar.gz > /tmp/unrarsrc-5.2.7.tar.gz && \
+    cd /tmp/ && \
+    tar xvzf unrarsrc-5.2.7.tar.gz && \
+    cd unrar && \
+    make -f makefile && \
+    install -v -m755 unrar /usr/bin && \
+    cd /tmp/ && \
+    rm -Rf /tmp/unrar && \
+    apt-get remove -y curl build-essential make gcc && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+ADD requirements.txt /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
+
+RUN adduser --system --uid 1000 multiverse --no-create-home --disabled-login
+USER multiverse
+
+ADD . /multiverse
+VOLUME /multiverse
+VOLUME /library
+
+CMD /multiverse/webserver
+
+# 3333: web, 4444: uwsgi
+EXPOSE 3333 4444
